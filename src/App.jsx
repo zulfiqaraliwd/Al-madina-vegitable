@@ -188,7 +188,7 @@ export default function App() {
 
   const lines = ITEMS.filter((i) => order[i.slug]);
   const message =
-    "Assalam o Alaikum, mujhe yeh order chahiye:\n" +
+    "Assalam o Alaikum, aaj ki orders:\n" +
     lines.map((i) => `- ${i.name}: ${order[i.slug]} kg/dozen`).join("\n");
   const waLink = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(message)}`;
 
@@ -233,7 +233,7 @@ export default function App() {
           <input
             className="search"
             type="search"
-            placeholder="Search sabzi ya fruit"
+            placeholder="Search vegetables or fruits"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             aria-label="Search items"
