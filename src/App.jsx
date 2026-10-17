@@ -1,5 +1,10 @@
-import { useState, useMemo } from "react";
+
 import "./App.css";
+import { useState, useMemo, useEffect } from "react";
+import "./invoice.css";
+import Admin from "./Admin";
+import { makeInvoicePdf } from "./invoicePdf";
+import { loadPrices, unitOf, peekInvoiceNo, bumpInvoiceNo } from "./prices";
 
 const WHATSAPP = "923480975065";
 const PHONE = "0345 5807524";
@@ -166,6 +171,19 @@ export default function App() {
   const [tab, setTab] = useState("All");
   const [query, setQuery] = useState("");
   const [order, setOrder] = useState({});
+  const [prices, setPrices] = useState(loadPrices());
+const [admin, setAdmin] = useState(window.location.hash === "#admin");
+const [showForm, setShowForm] = useState(false);
+const [form, setForm] = useState({ name: "", mobile: "", address: "" });
+
+useEffect(() => {
+  const onHash = () => {
+    setAdmin(window.location.hash === "#admin");
+    setPrices(loadPrices());
+  };
+  window.addEventListener("hashchange", onHash);
+  return () => window.removeEventListener("hashchange", onHash);
+}, []);
 
   const shown = useMemo(
     () =>
@@ -187,6 +205,23 @@ export default function App() {
     });
 
   const lines = ITEMS.filter((i) => order[i.slug]);
+  const total = lines.reduce((s, i) => s + (prices[i.slug] || 0) * order[i.slug], 0);
+
+const downloadPdf = (e) => {
+  e.preventDefault();
+  makeInvoicePdf({
+    invoiceNo: peekInvoiceNo(),
+    date: new Date().toLocaleDateString("en-GB"),
+    customer: form,
+    lines: lines.map((i) => ({ ...i, qty: order[i.slug] })),
+    prices,
+    unitOf,
+  });
+  bumpInvoiceNo();
+  setShowForm(false);
+};
+
+if (admin) return <Admin items={ITEMS} />;
   const message =
     "Assalam o Alaikum, aaj ki orders:\n" +
     lines.map((i) => `- ${i.name}: ${order[i.slug]} kg/dozen`).join("\n");
@@ -256,6 +291,11 @@ export default function App() {
                 <div className="info">
                   <h3>{item.name}</h3>
                   <p className="cat">{item.category}</p>
+                  {prices[item.slug] ? (
+  <p className="price">Rs. {prices[item.slug]} <small>/ {unitOf(item.slug)}</small></p>
+) : (
+  <p className="price none">Price on request</p>
+)}
                 </div>
                 {qty === 0 ? (
                   <button className="add" onClick={() => change(item.slug, 1)}>
@@ -320,13 +360,35 @@ export default function App() {
         <div className="orderbar">
           <div className="wrap orderbar-inner">
             <span>{lines.length} items selected</span>
+            <span className="orderbar-total">Rs. {total.toLocaleString()}</span>
             <button className="clear" onClick={() => setOrder({})}>Clear</button>
+            <button className="pdf-btn" onClick={() => setShowForm(true)}>Download PDF slip</button>
             <a className="send" href={waLink} target="_blank" rel="noreferrer">
               Send order on WhatsApp
             </a>
           </div>
         </div>
       )}
+      {showForm && (
+  <div className="modal-bg" onClick={() => setShowForm(false)}>
+    <form className="modal" onClick={(e) => e.stopPropagation()} onSubmit={downloadPdf}>
+      <h3>Customer details</h3>
+      <label>Name / Hotel
+        <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
+      </label>
+      <label>Mobile
+        <input value={form.mobile} onChange={(e) => setForm({ ...form, mobile: e.target.value })} />
+      </label>
+      <label>Address
+        <input value={form.address} onChange={(e) => setForm({ ...form, address: e.target.value })} />
+      </label>
+      <div className="modal-actions">
+        <button type="button" className="btn ghost" onClick={() => setShowForm(false)}>Cancel</button>
+        <button type="submit" className="btn">Download PDF</button>
+      </div>
+    </form>
+  </div>
+)}
     </div>
   );
 }

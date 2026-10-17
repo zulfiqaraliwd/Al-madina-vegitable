@@ -1,0 +1,39 @@
+/* Card par rate */
+.price { margin: 0.45rem 0 0; font-weight: 700; font-size: 1.05rem; color: var(--leaf-dark); }
+.price.none { font-weight: 500; font-size: 0.9rem; color: var(--muted); }
+.price small { font-weight: 500; color: var(--muted); }
+
+/* Order bar: total aur PDF button */
+.orderbar-total { font-weight: 700; color: #f1d98f; }
+.pdf-btn { font: inherit; font-weight: 700; padding: 0.6rem 1.2rem; border-radius: 999px; border: 1.5px solid #fff; background: transparent; color: #fff; cursor: pointer; }
+.pdf-btn:hover { background: #fff; color: var(--ink); }
+@media (max-width: 640px) { .orderbar-inner { flex-wrap: wrap; } }
+
+/* Customer details popup */
+.modal-bg { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.55); display: grid; place-items: center; z-index: 50; padding: 1rem; }
+.modal { background: #fff; border-radius: 18px; padding: 1.6rem; width: min(440px, 100%); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4); }
+.modal h3 { margin: 0 0 1rem; font-family: "Alfa Slab One", serif; font-weight: 400; font-size: 1.4rem; }
+.modal label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.8rem; }
+.modal input, .modal textarea, .admin input { display: block; width: 100%; margin-top: 0.3rem; font: inherit; padding: 0.6rem 0.8rem; border: 1.5px solid var(--line); border-radius: 10px; }
+.modal input:focus, .modal textarea:focus, .admin input:focus { outline: none; border-color: var(--leaf); box-shadow: 0 0 0 3px rgba(47, 125, 59, 0.18); }
+.modal-actions { display: flex; gap: 0.7rem; justify-content: flex-end; margin-top: 1rem; }
+
+.btn { font: inherit; font-weight: 700; padding: 0.65rem 1.4rem; border: 0; border-radius: 999px; background: var(--ink); color: #fff; cursor: pointer; }
+.btn:hover { background: var(--leaf); }
+.btn.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
+.btn.ghost:hover { background: rgba(0, 0, 0, 0.06); }
+
+/* Admin page */
+.admin { padding: 2rem 0 4rem; }
+.admin h2 { font-family: "Alfa Slab One", serif; font-weight: 400; margin: 0 0 0.5rem; }
+.admin-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; }
+.admin a { color: var(--leaf-dark); font-weight: 600; }
+.admin .note { background: #fff8e1; border: 1px solid #ecd9a0; border-radius: 12px; padding: 0.8rem 1rem; color: #5b4a12; }
+.admin h3 { margin: 1.8rem 0 0.8rem; }
+.admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.7rem 1.2rem; }
+.admin-row { display: grid; grid-template-columns: 1fr 100px auto; align-items: center; gap: 0.5rem; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 0.5rem 0.8rem; }
+.admin-row input { margin: 0; padding: 0.4rem 0.6rem; }
+.admin-row em { color: var(--muted); font-style: normal; font-size: 0.85rem; }
+.admin-actions { display: flex; gap: 0.8rem; align-items: center; margin-top: 2rem; }
+.admin .ok { color: var(--leaf-dark); font-weight: 700; }
+.admin > input { max-width: 260px; margin: 0.8rem 0; }
